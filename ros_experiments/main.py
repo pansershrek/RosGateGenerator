@@ -5,15 +5,33 @@ from math import pi
 import random
 import sys
 import time
+import yaml
+import logging
+from functools import partial
 
 import rospy, actionlib
+from std_msgs.msg import String
 
 from flexbe_msgs.msg import BehaviorExecutionAction, BehaviorExecutionGoal
 from sweetie_bot_clop_generator.clopper import MoveBaseGoal, MoveBaseAction
+from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 
 
 class ROSFlexbeTimeoutException(Exception):
     pass
+
+
+def callback(data, file):
+    with open(file, "a") as f:
+        print(json.dumps(yaml.safe_load(str(data))), file=f)
+
+def create_listener(trajectory_logs_file):
+
+    rospy.Subscriber(
+        "/motion/controller/step_sequence/goal",
+        FollowStepSequenceActionGoal,
+        partial(callback, file=trajectory_logs_file)
+    )
 
 def set_base_into_pose(pose: str) -> str:
     goal = BehaviorExecutionGoal()
@@ -123,11 +141,10 @@ def generate_trajectory(steps_amount: int, generation_logs_file: str) -> None:
             )
 
             print(f"Action result: {result}")
-
             logs[idx]["error_code"] = result.error_code
             logs[idx]["error_string"] = result.error_string
     except Exception as e:
-        rospy.logerr(f"{e}")
+        rospy.logerr(f"Exception: {e}")
         raise
     finally:
         with open(generation_logs_file, "w") as f:
@@ -143,20 +160,26 @@ def main():
         '--default-height', default=0.215, help="Default bot height"
     )
     parser.add_argument(
-        '--steps-amount', default=100, help="Amount robot's steps"
+        '--steps-amount', default=20, help="Amount robot's steps"
     )
     parser.add_argument(
-        '--random-seed', default=1313, help="Random seed"
+        '--random-seed', default=1719, help="Random seed"
     )
     parser.add_argument(
         '--generation-logs-file', default="generation_logs_file.json",
         help="Path to generation log file"
+    )
+    parser.add_argument(
+        '--trajectory-logs-file', default="trajectory_logs_file.json",
+        help="Path to generation trajectory's log file"
     )
     args = parser.parse_args()
 
     random.seed(args.random_seed)
 
     rospy.init_node('change_pose')
+
+    create_listener(args.trajectory_logs_file)
 
     try:
         result = set_base_into_pose(args.default_pose)
@@ -168,7 +191,7 @@ def main():
         generate_trajectory(args.steps_amount, args.generation_logs_file)
 
     except Exception as e:
-        rospy.logerr(f"{e}")
+        rospy.logerr(f"Exception: {e}")
         sys.exit(0)
 
 
