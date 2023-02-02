@@ -1,0 +1,1 @@
+{"0": {"trajectory_idx": 0, "state": {"x": 0, "y": 0, "angle": 0}, "new_state": {"x": -3.6, "y": -0.2, "angle": 5.811946409141117}, "shift": {"x": -3.6, "y": -0.2, "angle": 5.811946409141117}, "error_code": 0, "error_string": "executed"}}
