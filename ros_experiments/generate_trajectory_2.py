@@ -78,7 +78,7 @@ def walk_to_coord(new_state: dict, trajectory_length: int) -> Any:
 
 def generate_trajectory_2(
     trajectory_amount: int, generation_logs_file: str,
-    trajectory_length_restrictions: list = [1, 10]
+    trajectory_length_restrictions: list = [2, 10]
 ) -> None:
     logs = {}
     try:
