@@ -16,11 +16,6 @@ from generate_trajectory_1 import generate_trajectory_1
 from generate_trajectory_2 import generate_trajectory_2
 from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 
-
-class ROSFlexbeTimeoutException(Exception):
-    pass
-
-
 def callback(data, file):
     with open(file, "a") as f:
         print(json.dumps(yaml.safe_load(str(data))), file=f)

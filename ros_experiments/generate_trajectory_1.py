@@ -7,6 +7,10 @@ import rospy, actionlib
 
 from sweetie_bot_clop_generator.clopper import MoveBaseGoal, MoveBaseAction
 
+class ROSFlexbeTimeoutException(Exception):
+    pass
+
+
 def walk_to_coord(x: float = 0.4, y: float = 0.0, angle: float = 0.0) -> str:
     msg = MoveBaseGoal(gait_type = "walk_overlap", n_steps = 4, duration = 3.4)
     msg.setTargetBaseShift(x = x, y = y, angle = angle)

@@ -8,20 +8,30 @@ import rospy, actionlib
 
 from sweetie_bot_clop_generator.clopper import MoveBaseGoal, MoveBaseAction
 
+class ROSFlexbeTimeoutException(Exception):
+    pass
+
+
 def generate_trajectory_length(trajectory_length_restrictions: int) -> int:
     return random.randint(*trajectory_length_restrictions)
 
 def get_x_shift(trajectory_length: int) -> list:
-    shift_x_points = random.randint(0, trajectory_length * 4)
-    return shift_x_points, shift_x_points / 10.0
+    shift_x_points = random.randint(1, (trajectory_length - 1) * 4)
+    shift_x = shift_x_points / 10.0
+    if random.random() > 0.5:
+        shift_x *= -1
+    return shift_x_points, shift_x
 
 def get_y_shift(trajectory_length: int, shift_x_points: int) -> list:
     shift_y_points = 0
-    if random.random() > 0.3:
+    if random.random() > 0.15:
         shift_y_points = random.randint(
-            0, trajectory_length * 4 - shift_x_points
+            0, trajectory_length * 4 - shift_x_points - 1
         )
-    return shift_y_points, shift_y_points / 10.0
+    shift_y = shift_y_points / 10.0
+    if random.random() > 0.5:
+        shift_y *= -1
+    return shift_y_points, shift_y
 
 def get_new_angle(
     trajectory_length: int, shift_x_points: int, shift_y_points: int
@@ -34,6 +44,8 @@ def get_new_angle(
     ):
         new_angle = random.randint(0, 360) * pi / 180
         shift_angle = 1
+    if random.random() > 0.5:
+        new_angle *= -1
     return shift_angle, new_angle
 
 def walk_to_coord(new_state: dict, trajectory_length: int) -> Any:
