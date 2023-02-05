@@ -9,7 +9,8 @@ import traceback
 from datetime import datetime
 
 import rospy
-from std_msgs.msg import String
+
+import pickle
 
 from set_pose import set_base_into_pose, set_base_link_height
 from generate_trajectory_1 import generate_trajectory_1
@@ -17,8 +18,8 @@ from generate_trajectory_2 import generate_trajectory_2
 from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 
 def callback(data, file):
-    with open(file, "a") as f:
-        print(json.dumps(yaml.safe_load(str(data))), file=f)
+    with open(file, "wb") as f:
+        pickle.dump(data, f)
 
 def create_listener(trajectory_logs_file):
     rospy.Subscriber(
