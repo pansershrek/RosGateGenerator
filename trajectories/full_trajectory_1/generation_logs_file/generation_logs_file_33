@@ -1,1 +1,1 @@
-{"0": {"trajectory_idx": 0, "state": {"x": 0, "y": 0, "angle": 0}, "new_state": {"x": -1.4, "y": -0.8, "angle": 1.3089969389957465}, "shift": {"x": -1.4, "y": -0.8, "angle": -4.97418836818384}, "error_code": -1, "error_string": "Ipopt exit status: -1"}}
+{"0": {"trajectory_idx": 0, "state": {"x": 0, "y": 0, "angle": 0}, "new_state": {"x": 0.3, "y": 0.0, "angle": 5.515240436302081}, "shift": {"x": 0.3, "y": 0.0, "angle": 5.515240436302081}, "error_code": 0, "error_string": "executed"}}
