@@ -1,0 +1,11 @@
+{
+    "EPOCHS": 2,
+    "TRAIN_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file",
+    "TRAIN_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/generation_logs_file",
+    "TEST_TRAJECTORY_PATH": "",
+    "TEST_GENERATION_PATH": "",
+    "DEVICE": "cuda",
+    "SEED": 1717,
+    "LR": 0.003,
+    "LOG_PATH": "logs"
+}
