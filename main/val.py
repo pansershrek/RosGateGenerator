@@ -42,8 +42,6 @@ def val(
             )
             input_tensor = torch.cat((state_tensor, coords_tensor_cur, contact_tensor_cur))
 
-            optimizer.zero_grad()
-
             coords_tensor_pred, contact_tensor_pred, h, c = model(
                 input_tensor.to(device), h, c
             )
