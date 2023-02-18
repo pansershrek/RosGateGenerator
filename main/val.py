@@ -54,13 +54,18 @@ def val(
             )
             coords_loss += loss_coords.item()
             contact_loss += loss_contacs.item()
-            contact_acc += int(sum(contact_tensor_next == (contact_tensor_pred >= 0.5)))
+            contact_acc += int(
+                sum(
+                    contact_tensor_next ==
+                    (contact_tensor_pred.to("cpu") >= 0.5)
+                )
+            )
 
             h = h.detach()
             c = c.detach()
         coords_losses_mean.append(coords_loss)
         contact_losses_mean.append(contact_loss)
-        contact_acc_mean.append(contact_acc / (len(trajectory["points"]) - 1))
+        contact_acc_mean.append(contact_acc / (len(trajectory["points"]) - 1) / 4)
 
     if writer is not None:
         writer.add_scalar(
