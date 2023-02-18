@@ -12,7 +12,7 @@ def train_one_trajectory(
     shift_tensor = create_shift_tesor(trajectory["shift"])
     h, c = None, None
     losses = []
-    for point_idx in len(trajectory["points"]) - 1:
+    for point_idx in range(len(trajectory["points"]) - 1):
         coords_tensor_cur, contact_tensor_cur = (
             create_tensor_from_trajectory_point(
                 trajectory["points"][point_idx]
