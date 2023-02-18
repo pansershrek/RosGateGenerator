@@ -4,6 +4,7 @@
     "TRAIN_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/generation_logs_file",
     "TEST_TRAJECTORY_PATH": "",
     "TEST_GENERATION_PATH": "",
+    "MODEL_CHECKPOINTS": ".",
     "DEVICE": "cuda",
     "SEED": 1717,
     "LR": 0.003,

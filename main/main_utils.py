@@ -28,6 +28,9 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
     print(len(coord_tensor), len(leg_contacs))
     return torch.FloatTensor(coord_tensor), torch.FloatTensor(leg_contacs)
 
+def create_shift_tesor(shift: dict):
+    return torch.FloatTensor([shift["x"], shift["y"], shift["angle"]])
+
 def setup_seed(seed: int=1717) -> None:
     random.seed(seed)
     np.random.seed(seed)

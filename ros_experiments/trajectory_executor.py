@@ -6,8 +6,10 @@ import traceback
 import yaml
 import time
 import pickle
+from functools import partial
 
 import rospy
+import actionlib
 
 from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 from set_pose import set_base_into_pose, set_base_link_height
@@ -32,7 +34,7 @@ def main():
     )
     parser.add_argument(
         '--trajectory-path',
-        default="/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file/trajectory_logs_file_1",
+        default="home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file/trajectory_logs_file_1",
         help="Path to trajectory path"
     )
     args = parser.parse_args()
@@ -52,10 +54,11 @@ def main():
         print(result, flush=True)
         with open(args.trajectory_path, "rb") as f:
             trajectory = pickle.load(f)
-        while not rospy.is_shutdown():
-            pubisher.publish(trajectory)
-            time.sleep(10)
-            print("Send")
+
+        print("Start to send msg")
+        pubisher.publish(trajectory)
+        print("Sended")
+
     except Exception as e:
         rospy.logerr(f"Exception: {e}")
         print(traceback.format_exc())

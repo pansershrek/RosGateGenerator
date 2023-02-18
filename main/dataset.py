@@ -24,6 +24,8 @@ class MyDataset(Dataset):
         return len(self.idx2data)
 
     def __getitem__(self, idx: int):
+        if idx >= self.__len__():
+            raise StopIteration
         with open(self.idx2data[idx]["trajectory"], "rb") as f:
             trajectory = pickle.load(f)
             trajectory = yaml.safe_load(str(trajectory))
@@ -33,6 +35,7 @@ class MyDataset(Dataset):
             random_item = random.randint(0, len(self.idx2data) - 1)
             return self.__getitem__(random_item)
         data = {
+            "trajectory_idx": idx,
             "shift": generation["0"]["shift"],
             "points": []
         }

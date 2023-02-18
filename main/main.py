@@ -3,7 +3,7 @@ import argparse
 
 from torch.utils.tensorboard import SummaryWriter
 import torch.optim as optim
-from torch.nn import MSELoss
+from torch.nn import MSELoss, BCELoss
 from torch.optim.lr_scheduler import StepLR
 
 from train import train
@@ -24,19 +24,19 @@ def main():
 
     writer = SummaryWriter(log_dir=config["LOG_PATH"])
 
-
     train_dataset = MyDataset(config["TRAIN_TRAJECTORY_PATH"], config["TRAIN_GENERATION_PATH"])
 
-    model = MyModel(95+4, 256, 3)
+    model = MyModel(95 + 4 + 3, 256, 3)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"])
 
-    loss = MSELoss()
+    loss_coord = MSELoss()
+    loss_contacs = BCELoss()
     scheduler = StepLR(optimizer, step_size=len(train_dataset)*3, gamma=0.85)
 
     train(
-        model, train_dataset, None, loss, optimizer, config["DEVICE"],
-        writer, config["EPOCHS"], scheduler
+        model, train_dataset, None, loss_coord, loss_contacs,
+        config["DEVICE"], writer, config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]
     )
 
 
