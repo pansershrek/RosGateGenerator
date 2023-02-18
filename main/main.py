@@ -26,7 +26,7 @@ def main():
 
     train_dataset = MyDataset(config["TRAIN_TRAJECTORY_PATH"], config["TRAIN_GENERATION_PATH"])
 
-    model = MyModel(95 + 4 + 3, 256, 3)
+    model = MyModel(2*(95 + 4) + 3, 256, 3)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"])
 
@@ -35,7 +35,7 @@ def main():
     scheduler = StepLR(optimizer, step_size=len(train_dataset)*3, gamma=0.85)
 
     train(
-        model, train_dataset, None, loss_coord, loss_contacs,
+        model, train_dataset, None, optimizer, loss_coord, loss_contacs,
         config["DEVICE"], writer, config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]
     )
 

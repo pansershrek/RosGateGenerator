@@ -25,7 +25,6 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
             for z in sorted(tmp_point[x][y].keys()):
                 for k in sorted(tmp_point[x][y][z].keys()):
                     coord_tensor.append(tmp_point[x][y][z][k])
-    print(len(coord_tensor), len(leg_contacs))
     return torch.FloatTensor(coord_tensor), torch.FloatTensor(leg_contacs)
 
 def create_shift_tesor(shift: dict):
