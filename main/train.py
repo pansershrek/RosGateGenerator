@@ -11,15 +11,24 @@ def train(
     criterion_contacs, device, writer, epochs, scheduler, model_checkpoints
 ):
     for epoch in range(epochs):
+        losses = []
         print(f"Start epoch: {epoch}")
         for trajectory in train_dataloader:
-            train_one_trajectory(
+            loss = train_one_trajectory(
                 model, trajectory, optimizer, criterion_coord,
-                criterion_contacs, device, writer, epochs, scheduler
+                criterion_contacs, device, writer, epoch, scheduler
             )
-            break
+            losses.append(loss)
+        if writer is not None:
+            writer.add_scalar(
+                f"train/loss",
+                sum(losses)/len(losses), epoch
+            )
         torch.save(
             model.state_dict(),
             os.path.join(model_checkpoints, f'checkpoint_{epoch}.pt')
         )
-    #val()
+        val(
+            model, val_dataloader, criterion_coord,
+            criterion_contacs, device, writer, epoch
+        )

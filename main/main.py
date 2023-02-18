@@ -25,6 +25,7 @@ def main():
     writer = SummaryWriter(log_dir=config["LOG_PATH"])
 
     train_dataset = MyDataset(config["TRAIN_TRAJECTORY_PATH"], config["TRAIN_GENERATION_PATH"])
+    val_dataset = MyDataset(config["TEST_TRAJECTORY_PATH"], config["TEST_GENERATION_PATH"])
 
     model = MyModel(2*(95 + 4) + 3, 256, 3)
     model = model.to(config["DEVICE"])
@@ -35,7 +36,7 @@ def main():
     scheduler = StepLR(optimizer, step_size=len(train_dataset)*3, gamma=0.85)
 
     train(
-        model, train_dataset, None, optimizer, loss_coord, loss_contacs,
+        model, train_dataset, val_dataset, optimizer, loss_coord, loss_contacs,
         config["DEVICE"], writer, config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]
     )
 

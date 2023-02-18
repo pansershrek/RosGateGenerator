@@ -6,8 +6,8 @@ from main_utils import create_tensor_from_trajectory_point, create_shift_tesor
 
 def train_one_trajectory(
     model, trajectory, optimizer, criterion_coord, criterion_contacs,
-    device, writer, epochs, scheduler
-)-> None:
+    device, writer, epoch, scheduler
+):
     model.train()
     shift_tensor = create_shift_tesor(trajectory["shift"])
     coords_tensor_start, contact_tensor_start = (
@@ -42,13 +42,13 @@ def train_one_trajectory(
             input_tensor.to(device), h, c
         )
 
-        loss_coord = criterion_coord(
+        loss_coords = criterion_coord(
             coords_tensor_pred, coords_tensor_next.to(device)
         )
         loss_contacs = criterion_contacs(
             contact_tensor_pred, contact_tensor_next.to(device)
         )
-        loss = loss_coord + loss_contacs
+        loss = loss_coords + loss_contacs
         loss.backward() # Remove detach and add loss.backward(retain_graph=True)
         h = h.detach()
         c = c.detach()
@@ -58,11 +58,12 @@ def train_one_trajectory(
             scheduler.step()
         if writer is not None:
             writer.add_scalar(
-                f"train_one_trajectory/loss/step/trajectory_{trajectory['trajectory_idx']}",
+                f"train_one_trajectory_step_loss/epoch_{epoch}/trajectory_{trajectory['trajectory_idx']}",
                 loss, point_idx
             )
     if writer is not None:
         writer.add_scalar(
-            f"train_one_trajectory/loss/mean/trajectory_{trajectory['trajectory_idx']}",
-            sum(losses)/len(losses), epochs
+            f"train_one_trajectory_mean_loss/trajectory_{trajectory['trajectory_idx']}",
+            sum(losses)/len(losses), epoch
         )
+    return sum(losses) / len(losses)
