@@ -5,7 +5,7 @@ import torch
 from main_utils import create_tensor_from_trajectory_point, create_shift_tesor
 
 def train_one_trajectory(
-    model, trajectory, criterion, optimizer_coord, optimizer_contacs,
+    model, trajectory, optimizer_coord, optimizer_contacs,
     device, writer, epochs, scheduler
 )-> None:
     model.train()

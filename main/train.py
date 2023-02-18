@@ -7,12 +7,12 @@ from train_one_trajectory import train_one_trajectory
 from val import val
 
 def train(
-    model, train_dataloader, val_dataloader, criterion, optimizer_coord,
+    model, train_dataloader, val_dataloader, optimizer_coord,
     optimizer_contacs, device, writer, epochs, scheduler, model_checkpoints
 ):
     for trajectory in train_dataloader:
         train_one_trajectory(
-            model, trajectory, criterion, optimizer_coord,
+            model, trajectory, optimizer_coord,
             optimizer_contacs, device, writer, epochs, scheduler
         )
         break
