@@ -14,7 +14,13 @@ def val(
     h, c = None, None
 
     for step, trajectory in enumerate(val_dataloader):
+        predict_final_point = []
+        real_final_point = []
         for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
+            masks = (trajectory["masks"][:, trajectory_step_idx] == 1.0).view(-1)
+            if int(sum(masks)) == 0:
+                break
+
             predict_points, h, c = model(
                 trajectory["points"][:, :trajectory_step_idx].to(device),
                 h, c
@@ -27,24 +33,66 @@ def val(
             loss = criterion_coord(
                 predict_points.view(
                     [predict_points.shape[0], predict_points.shape[2]]
-                ),
+                )[masks],
                 trajectory["points"][
-                    :, trajectory_step_idx, - points_idx :
+                    masks, trajectory_step_idx, - points_idx :
                 ].to(device)
             )
+            # Save final points of trajectories
+            if (
+                trajectory_step_idx + 1 == trajectory["points"].shape[1]
+            ):
+                for masks_idx in range(len(masks)):
+                    if masks[masks_idx] == True:
+                        predict_final_point.append(
+                            predict_points.view(
+                                [
+                                    predict_points.shape[0],
+                                    predict_points.shape[2]
+                                ]
+                            )[masks_idx]
+                        )
+                        real_final_point.append(
+                            trajectory["points"][
+                                masks_idx, trajectory_step_idx, - points_idx :
+                            ].to(device)
+                        )
+
+            if (
+                trajectory_step_idx + 1 < trajectory["points"].shape[1]
+            ):
+                masks_next = (
+                    trajectory["masks"][:, trajectory_step_idx + 1] == 1.0
+                ).view(-1)
+                for masks_idx in range(len(masks)):
+                    if (
+                        masks[masks_idx] == True and
+                        masks_next[masks_idx] == False
+                    ):
+                        predict_final_point.append(
+                            predict_points.view(
+                                [
+                                    predict_points.shape[0],
+                                    predict_points.shape[2]
+                                ]
+                            )[masks_idx]
+                        )
+                        real_final_point.append(
+                            trajectory["points"][
+                                masks_idx, trajectory_step_idx, - points_idx :
+                            ].to(device)
+                        )
+
 
             h = h.detach()
             c = c.detach()
 
             losses.append(loss.item())
+
         losses_final_point.append(
             criterion_coord(
-                predict_points.view(
-                    [predict_points.shape[0], predict_points.shape[2]]
-                ),
-                trajectory["points"][
-                    :, -1, - points_idx :
-                ].to(device)
+                torch.stack(predict_final_point, dim=0),
+                torch.stack(real_final_point, dim=0)
             )
         )
 

@@ -9,5 +9,7 @@
     "SEED": 1717,
     "LR": 0.003,
     "LOG_PATH": "logs",
-    "BATCH_SIZE": 8
+    "BATCH_SIZE": 8,
+    "MODE": "TRAIN",
+    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints/checkpoint_0.pt"
 }

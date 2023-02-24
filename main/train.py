@@ -15,9 +15,12 @@ def train(
         losses = []
         print(f"Start epoch: {epoch}")
         for step, trajectory in enumerate(train_dataloader):
-
             h, c = None, None
             for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
+                masks = (trajectory["masks"][:, trajectory_step_idx] == 1.0).view(-1)
+                if int(sum(masks)) == 0:
+                    break
+
                 optimizer.zero_grad()
 
                 predict_points, h, c = model(
@@ -32,9 +35,9 @@ def train(
                 loss = criterion_coord(
                     predict_points.view(
                         [predict_points.shape[0], predict_points.shape[2]]
-                    ),
+                    )[masks],
                     trajectory["points"][
-                        :, trajectory_step_idx, - points_idx :
+                        masks, trajectory_step_idx, - points_idx :
                     ].to(device)
                 )
 
@@ -58,7 +61,10 @@ def train(
                             trajectory_step_idx
                         )
                     )
-
+        val(
+            model, val_dataloader, criterion_coord,
+            device, writer, epoch
+        )
         if writer is not None:
             writer.add_scalar(
                 "train/loss",
@@ -67,8 +73,4 @@ def train(
         torch.save(
             model.state_dict(),
             os.path.join(model_checkpoints, f'checkpoint_{epoch}.pt')
-        )
-        val(
-            model, val_dataloader, criterion_coord,
-            device, writer, epoch
         )

@@ -45,7 +45,7 @@ def main():
     )
     val_dataloader = DataLoader(
         val_dataset,
-        batch_size = 1,
+        batch_size = config["BATCH_SIZE"],
         shuffle = False
     )
 
