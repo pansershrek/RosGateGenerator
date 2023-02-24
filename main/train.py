@@ -8,17 +8,57 @@ from val import val
 
 def train(
     model, train_dataloader, val_dataloader, optimizer, criterion_coord,
-    criterion_contacs, device, writer, epochs, scheduler, model_checkpoints
+    device, writer, epochs, scheduler, model_checkpoints
 ):
+    model.train()
     for epoch in range(epochs):
         losses = []
         print(f"Start epoch: {epoch}")
-        for trajectory in train_dataloader:
-            loss = train_one_trajectory(
-                model, trajectory, optimizer, criterion_coord,
-                criterion_contacs, device, writer, epoch, scheduler
-            )
-            losses.append(loss)
+        for step, trajectory in enumerate(train_dataloader):
+
+            h, c = None, None
+            for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
+                optimizer.zero_grad()
+
+                predict_points, h, c = model(
+                    trajectory["points"][:, :trajectory_step_idx].to(device),
+                    h, c
+                )
+
+                points_idx = (
+                    trajectory["points"].shape[2] -
+                    trajectory["shift"].shape[1]
+                ) // 2
+                loss = criterion_coord(
+                    predict_points.view(
+                        [predict_points.shape[0], predict_points.shape[2]]
+                    ),
+                    trajectory["points"][
+                        :, trajectory_step_idx, - points_idx :
+                    ].to(device)
+                )
+
+                h = h.detach()
+                c = c.detach()
+
+                loss.backward()
+                optimizer.step()
+
+                losses.append(loss.item())
+
+                if scheduler is not None:
+                    scheduler.step()
+
+                if writer is not None:
+                    writer.add_scalar(
+                        f"train/cur_loss",
+                        loss.item(),
+                        (
+                            epoch * trajectory["points"].shape[1] +
+                            trajectory_step_idx
+                        )
+                    )
+
         if writer is not None:
             writer.add_scalar(
                 f"train/loss",
@@ -30,5 +70,5 @@ def train(
         )
         val(
             model, val_dataloader, criterion_coord,
-            criterion_contacs, device, writer, epoch
+            device, writer, epoch
         )

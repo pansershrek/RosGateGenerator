@@ -1,11 +1,45 @@
 #!/usr/bin/env python3
 import json
 import copy
-from collections import OrderedDict
+from collections import OrderedDict, deque
 import random
 
 import torch
 import numpy as np
+
+class LRUCache:
+    def __init__(self, cache_size):
+        self.cache_size = cache_size
+        self.queue = deque()
+        self.hash_map = dict()
+
+    def is_queue_full(self):
+        return len(self.queue) == self.cache_size
+
+    def set(self, key, value):
+        if self.cache_size in [0, None]:
+            return
+        if key not in self.hash_map:
+            if self.is_queue_full():
+                pop_key = self.queue.pop()
+                self.hash_map.pop(pop_key)
+                self.queue.appendleft(key)
+                self.hash_map[key] = value
+            else:
+                self.queue.appendleft(key)
+                self.hash_map[key] = value
+
+    def get(self, key):
+        if key not in self.hash_map:
+            return -1, False
+        else:
+            self.queue.remove(key)
+            self.queue.appendleft(key)
+            return self.hash_map[key], True
+
+    def clear(self):
+        self.queue = deque()
+        self.hash_map = dict()
 
 def pprint_trajctory_point(point: dict) -> None:
     print(json.dumps(point, indent=4))
@@ -25,10 +59,10 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
             for z in sorted(tmp_point[x][y].keys()):
                 for k in sorted(tmp_point[x][y][z].keys()):
                     coord_tensor.append(tmp_point[x][y][z][k])
-    return torch.FloatTensor(coord_tensor), torch.FloatTensor(leg_contacs)
+    return coord_tensor, leg_contacs
 
 def create_shift_tesor(shift: dict):
-    return torch.FloatTensor([shift["x"], shift["y"], shift["angle"]])
+    return [shift["x"], shift["y"], shift["angle"]]
 
 def setup_seed(seed: int=1717) -> None:
     random.seed(seed)
