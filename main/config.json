@@ -11,5 +11,115 @@
     "LOG_PATH": "logs",
     "BATCH_SIZE": 8,
     "MODE": "TRAIN",
-    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints/checkpoint_0.pt"
+    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints/checkpoint_0.pt",
+    "INFERENCE_SHIFT": {
+        "x": -0.8,
+        "y": -0.5,
+        "angle": 4.39822971502571
+    },
+    "INFERENCE_START_POINT": {
+        "step": 0,
+        "base_motion": {
+            "pose": {
+                "position": {
+                    "x": 5.922889969879408,
+                    "y": -6.796383953502179
+                },
+                "orientation": {
+                    "z": 0.7431447937943824,
+                    "w": 0.669130641546406
+                }
+            },
+            "twist": {
+                "linear": {
+                    "x": -5.162885651482533e-258,
+                    "y": 4.33478397738431e-258
+                },
+                "angular": {
+                    "z": 0.0
+                }
+            },
+            "contact": false
+        },
+        "leg1": {
+            "pose": {
+                "position": {
+                    "x": 0.08000000000000186,
+                    "y": 0.038000000000007424,
+                    "z": -0.185
+                }
+            },
+            "twist": {
+                "linear": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "angular": {
+                    "z": 0.0
+                }
+            },
+            "contact": true
+        },
+        "leg3": {
+            "pose": {
+                "position": {
+                    "x": -0.079999999999998,
+                    "y": 0.038000000000006647,
+                    "z": -0.185
+                }
+            },
+            "twist": {
+                "linear": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "angular": {
+                    "z": 0.0
+                }
+            },
+            "contact": true
+        },
+        "leg4": {
+            "pose": {
+                "position": {
+                    "x": -0.07999999999999916,
+                    "y": -0.03799999999999713,
+                    "z": -0.185
+                }
+            },
+            "twist": {
+                "linear": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "angular": {
+                    "z": 0.0
+                }
+            },
+            "contact": true
+        },
+        "leg2": {
+            "pose": {
+                "position": {
+                    "x": 0.08000000000000185,
+                    "y": -0.03799999999999894,
+                    "z": -0.185
+                }
+            },
+            "twist": {
+                "linear": {
+                    "x": 0.0,
+                    "y": 0.0,
+                    "z": 0.0
+                },
+                "angular": {
+                    "z": 0.0
+                }
+            },
+            "contact": true
+        }
+    }
 }
