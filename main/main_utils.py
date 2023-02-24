@@ -83,3 +83,6 @@ def get_config(config_path: str) -> dict:
         config = json.load(f)
     return setup_device(config)
 
+def get_final_point(start_point, shift):
+    raise NotImplementedError
+

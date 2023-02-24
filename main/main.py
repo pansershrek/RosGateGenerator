@@ -49,7 +49,7 @@ def main():
         shuffle = False
     )
 
-    model = MyModel(2 * 35 + 3, 35, 256, 3)
+    model = MyModel(2 * 35 + 3, 35, 256, 5)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"]) # Maybe use LBFGS???
 
