@@ -51,7 +51,7 @@ def train(
 
                 if writer is not None:
                     writer.add_scalar(
-                        f"train/cur_loss",
+                        "train/cur_loss",
                         loss.item(),
                         (
                             epoch * trajectory["points"].shape[1] +
@@ -61,7 +61,7 @@ def train(
 
         if writer is not None:
             writer.add_scalar(
-                f"train/loss",
+                "train/loss",
                 sum(losses)/len(losses), epoch
             )
         torch.save(

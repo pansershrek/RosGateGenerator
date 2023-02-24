@@ -10,6 +10,7 @@ def val(
 ):
     model.eval()
     losses = []
+    losses_final_point = []
     h, c = None, None
 
     for step, trajectory in enumerate(val_dataloader):
@@ -36,10 +37,25 @@ def val(
             c = c.detach()
 
             losses.append(loss.item())
+        losses_final_point.append(
+            criterion_coord(
+                predict_points.view(
+                    [predict_points.shape[0], predict_points.shape[2]]
+                ),
+                trajectory["points"][
+                    :, -1, - points_idx :
+                ].to(device)
+            )
+        )
 
     if writer is not None:
         writer.add_scalar(
-            f"val/loss",
-            sum(losses)/len(losses), epoch
+            "val/loss",
+            sum(losses) / len(losses), epoch
+        )
+        writer.add_scalar(
+            "val/final_point_dist",
+            sum(losses_final_point) / len(losses_final_point),
+            epoch
         )
 
