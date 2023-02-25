@@ -21,7 +21,7 @@ class MyDatasetFull(Dataset):
     ) -> None:
         self.trajectory_max_len = trajectory_max_len
         self.idx2data = {}
-        for x in os.listdir(trajectories_path):
+        for x in sorted(os.listdir(trajectories_path)):
             self.idx2data[len(self.idx2data)] = {
                 "trajectory": os.path.join(trajectories_path, x),
                 "generation": os.path.join(

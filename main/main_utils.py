@@ -73,7 +73,10 @@ def setup_seed(seed: int=1717) -> None:
 
 def setup_device(config: dict) -> dict:
     if config["DEVICE"] == "cuda":
-        config["DEVICE"] = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+        config["DEVICE"] = (
+            torch.device("cuda") if torch.cuda.is_available()
+            else torch.device("cpu")
+        )
     else:
         config["DEVICE"] = torch.device("cpu")
     return config
@@ -85,4 +88,3 @@ def get_config(config_path: str) -> dict:
 
 def get_final_point(start_point, shift):
     raise NotImplementedError
-
