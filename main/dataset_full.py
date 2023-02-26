@@ -95,6 +95,7 @@ class MyDatasetFull(Dataset):
         data["start_point"] = create_tensor_from_trajectory_point(
             points[0]
         )[0]
+        data["real_len"] = len(points)
 
         for idx_tmp, x in enumerate(points):
             if (
