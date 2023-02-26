@@ -11,6 +11,7 @@ from train import train
 from dataset_full import MyDatasetFull
 from model import MyModel
 from main_utils import get_config, setup_seed
+from create_message import create_message
 
 def main():
     parser = argparse.ArgumentParser()

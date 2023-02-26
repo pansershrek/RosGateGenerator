@@ -9,7 +9,7 @@ import torch
 from torch.utils.data import Dataset
 
 from main_utils import create_tensor_from_trajectory_point, create_shift_tesor
-from main_utils import LRUCache
+from main_utils import LRUCache, create_full_trajectoy_point
 
 class MyDatasetFull(Dataset):
 
@@ -104,9 +104,7 @@ class MyDatasetFull(Dataset):
             ):
                 break
             data["points"].append(
-                data["shift"] +
-                create_tensor_from_trajectory_point(points[0])[0] +
-                create_tensor_from_trajectory_point(x)[0]
+                create_full_trajectoy_point(data["shift"], points[0], x)
             )
             if (
                 self.trajectory_max_len is not None and

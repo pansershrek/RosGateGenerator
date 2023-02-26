@@ -61,6 +61,18 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
                     coord_tensor.append(tmp_point[x][y][z][k])
     return coord_tensor, leg_contacs
 
+def create_full_trajectoy_point(shift, start_point, cur_point):
+    return (
+        shift +
+        create_tensor_from_trajectory_point(start_point)[0] +
+        create_tensor_from_trajectory_point(cur_point)[0]
+    )
+
+def remove_state_part_from_trajectory_point(
+    point, shift_part = 3, start_point_part = 35
+):
+    return point[shift_part + start_point_part: ]
+
 def create_shift_tesor(shift: dict):
     return [shift["x"], shift["y"], shift["angle"]]
 
