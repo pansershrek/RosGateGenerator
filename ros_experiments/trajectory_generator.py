@@ -7,15 +7,14 @@ import yaml
 from functools import partial
 import traceback
 from datetime import datetime
+import pickle
 
 import rospy
-
-import pickle
+from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 
 from set_pose import set_base_into_pose, set_base_link_height
 from generate_trajectory_1 import generate_trajectory_1
 from generate_trajectory_2 import generate_trajectory_2
-from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
 
 def callback(data, file):
     with open(file, "wb") as f:

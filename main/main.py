@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import argparse
+import pickle
 
+import torch
 from torch.utils.tensorboard import SummaryWriter
 import torch.optim as optim
 from torch.nn import MSELoss, BCELoss
@@ -12,6 +14,7 @@ from dataset_full import MyDatasetFull
 from model import MyModel
 from main_utils import get_config, setup_seed
 from create_message import create_message
+from inference import inference
 
 def main():
     parser = argparse.ArgumentParser()
@@ -58,16 +61,21 @@ def main():
     loss_contacs = BCELoss()
     scheduler = StepLR(optimizer, step_size=len(train_dataset)*3, gamma=0.85)
 
-    train(
-        model, train_dataloader, val_dataloader, optimizer, loss_coord,
-        config["DEVICE"], writer, config["EPOCHS"], scheduler,
-        config["MODEL_CHECKPOINTS"]
-    )
-
-    #train_all_trajectories(
-    #    model, train_dataset, val_dataset, optimizer, loss_coord, loss_contacs,
-    #    config["DEVICE"], writer, config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]
-    #)
+    if config["MODE"] == "INFERENCE":
+        #model.load_state_dict(torch.load(config["INFERENCE_MODEL_PATH"]))
+        model.eval()
+        inference_points = inference(
+            model, config["INFERENCE_START_POINT"], config["INFERENCE_SHIFT"], device
+        )
+        ros_message = create_message(inference_points)
+        with open(config["INFERENCE_TRAJECTORY_PATH"], "wb") as f:
+            print(pickle.dump(ros_message, f))
+    else:
+        train(
+            model, train_dataloader, val_dataloader, optimizer, loss_coord,
+            config["DEVICE"], writer, config["EPOCHS"], scheduler,
+            config["MODEL_CHECKPOINTS"]
+        )
 
 
 

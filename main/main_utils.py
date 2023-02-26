@@ -98,5 +98,19 @@ def get_config(config_path: str) -> dict:
         config = json.load(f)
     return setup_device(config)
 
-def get_final_point(start_point, shift):
+def get_base_position(point):
+    base_position = []
+    base_position.append(point[2]) # x
+    base_position.append(point[3]) # y
+    base_position.append(point[0]) # w
+    base_position.append(point[1]) # z
+    return base_position
+
+def get_final_base_position(base_position, shift):
     raise NotImplementedError
+
+def base_is_close(cur_base_position, final_base_position, eps):
+    for x, y, z in zip(cur_base_position, final_base_position, eps):
+        if abs(x-y) > z:
+            return False
+    return True

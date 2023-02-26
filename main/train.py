@@ -24,9 +24,9 @@ def train(
                 optimizer.zero_grad()
 
                 predict_points, h, c = model(
-                    trajectory["points"][:, :trajectory_step_idx].to(device),
+                    trajectory["points"][:, trajectory_step_idx].to(device),
                     h, c
-                )
+                ) # Maybe use `:trajectory_step_idx` instead `trajectory_step_idx` to train on all history
 
                 points_idx = (
                     trajectory["points"].shape[2] -
