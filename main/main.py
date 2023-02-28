@@ -65,7 +65,8 @@ def main():
         #model.load_state_dict(torch.load(config["INFERENCE_MODEL_PATH"]))
         model.eval()
         inference_points = inference(
-            model, config["INFERENCE_START_POINT"], config["INFERENCE_SHIFT"], device
+            model, config["INFERENCE_START_POINT"],
+            config["INFERENCE_SHIFT"], config["DEVICE"]
         )
         ros_message = create_message(inference_points)
         with open(config["INFERENCE_TRAJECTORY_PATH"], "wb") as f:
