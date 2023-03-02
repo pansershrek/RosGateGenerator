@@ -70,7 +70,7 @@ def main():
         )
         ros_message = create_message(inference_points)
         with open(config["INFERENCE_TRAJECTORY_PATH"], "wb") as f:
-            print(pickle.dump(ros_message, f))
+            pickle.dump(ros_message, f)
     else:
         train(
             model, train_dataloader, val_dataloader, optimizer, loss_coord,

@@ -37,7 +37,8 @@ BASE_MOTION_TEMPLATE = {
             "y": 0.0,
             "z": -0.4473738291300291
         }
-    }
+    },
+    "contact": False
 }
 
 LEG_TEMPLATE = {
