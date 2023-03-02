@@ -22,7 +22,6 @@ def train(
                     break
 
                 optimizer.zero_grad()
-
                 predict_points, h, c = model(
                     trajectory["points"][:, trajectory_step_idx].to(device),
                     h, c

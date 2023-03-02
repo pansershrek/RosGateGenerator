@@ -4,6 +4,7 @@ from typing import Optional
 import json
 import pickle
 import yaml
+import logging
 
 import torch
 from torch.utils.data import Dataset
@@ -47,12 +48,14 @@ class MyDatasetFull(Dataset):
                 trajectory = yaml.safe_load(str(trajectory))
             with open(self.idx2data[idx]["generation"], "r") as f:
                 generation = json.load(f)
-        except:
+        except Exception as e:
+            logging.warning(f"Invalid trajectory with exception: {e}")
             random_item = random.randint(0, len(self.idx2data) - 1)
             return self.__getitem__(random_item)
 
         if generation["0"]["error_code"] != 0:
             random_item = random.randint(0, len(self.idx2data) - 1)
+            logging.error("Invalid trajectory")
             return self.__getitem__(random_item)
 
         data = {
