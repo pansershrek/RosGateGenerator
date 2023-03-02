@@ -46,12 +46,16 @@ def main():
     train_dataloader = DataLoader(
         train_dataset,
         batch_size = config["BATCH_SIZE"],
-        shuffle = True
+        shuffle = True,
+        num_workers = 16,
+        drop_last = True
     )
     val_dataloader = DataLoader(
         val_dataset,
         batch_size = config["BATCH_SIZE"],
-        shuffle = False
+        shuffle = False,
+        num_workers = 16,
+        drop_last = True
     )
 
     model = MyModel(2 * 35 + 3, 35, 256, 5)
