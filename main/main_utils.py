@@ -4,6 +4,7 @@ import copy
 from collections import OrderedDict, deque
 import random
 
+from scipy.spatial.transform import Rotation
 import torch
 import numpy as np
 
@@ -50,6 +51,7 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
     tmp_point = copy.deepcopy(point)
     tmp_point["base_motion"].pop("contact", None)
     for leg in ["leg1", "leg2", "leg3", "leg4"]:
+        tmp_point[leg].pop("contact", False)
         leg_contacs.append(tmp_point[leg].pop("contact", False))
 
     for x in sorted(tmp_point.keys()):
@@ -60,6 +62,29 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
                 for k in sorted(tmp_point[x][y][z].keys()):
                     coord_tensor.append(tmp_point[x][y][z][k])
     return coord_tensor, leg_contacs
+
+def create_tensor_from_trajectory_point_for_predict(point: dict) -> list:
+    tmp_point = copy.deepcopy(point)
+
+    tmp_point["base_motion"].pop("accel", None)
+    tmp_point["base_motion"]["pose"]["position"].pop("z", None)
+    tmp_point["base_motion"]["pose"]["orientation"].pop("x", None)
+    tmp_point["base_motion"]["pose"]["orientation"].pop("y", None)
+    tmp_point["base_motion"]["twist"]["linear"].pop("z", None)
+    tmp_point["base_motion"]["twist"]["angular"].pop("x", None)
+    tmp_point["base_motion"]["twist"]["angular"].pop("y", None)
+    for x in ["leg1", "leg2", "leg3", "leg4"]:
+        tmp_point[x].pop("accel", None)
+        tmp_point[x]["pose"].pop(
+            "orientation", None
+        )
+        tmp_point[x]["twist"]["angular"].pop(
+            "x", None
+        )
+        tmp_point[x]["twist"]["angular"].pop(
+            "y", None
+        )
+    return create_tensor_from_trajectory_point(tmp_point)
 
 def create_full_trajectoy_point(shift, start_point, cur_point):
     return (
@@ -99,18 +124,40 @@ def get_config(config_path: str) -> dict:
     return setup_device(config)
 
 def get_base_position(point):
-    base_position = []
-    base_position.append(point[2]) # x
-    base_position.append(point[3]) # y
-    base_position.append(point[0]) # w
-    base_position.append(point[1]) # z
-    return base_position
+    return {
+        "x": point[2], # position
+        "y": point[3], # position
+        "z": point[1], # orientation
+        "w": point[0], # orientation
+    }
 
 def get_final_base_position(base_position, shift):
-    raise NotImplementedError
+    final_position = copy.deepcopy(base_position)
 
-def base_is_close(cur_base_position, final_base_position, eps):
-    for x, y, z in zip(cur_base_position, final_base_position, eps):
-        if abs(x-y) > z:
-            return False
+    #https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.transform.Rotation.as_quat.html
+    #The mapping from quaternions to rotations is two-to-one, i.e. quaternions q and -q,
+    #where -q simply reverses the sign of each component, represent the same spatial rotation.
+    shift_rot = Rotation.from_euler("xyz", [0, 0, shift["angle"]], degrees=False)
+    base_rot = Rotation.from_quat([0, 0, base_position["z"], base_position["w"]])
+
+    final_rot = shift_rot * base_rot
+
+    final_position["x"] += shift["x"]
+    final_position["y"] += shift["y"]
+    final_position["z"] = final_rot.as_quat()[2]
+    final_position["w"] = final_rot.as_quat()[3]
+    return final_position
+
+def base_is_close(cur_base_position, fin_base_position, eps):
+    for key in cur_base_position.keys():
+        if key == "x" or key == "y":
+            if abs(cur_base_position[key] - fin_base_position[key]) > eps[key]:
+                return False
+    cur_angle = Rotation.from_quat([0, 0, cur_base_position["z"], cur_base_position["w"]])
+    fin_angle = Rotation.from_quat([0, 0, fin_base_position["z"], fin_base_position["w"]])
+
+    cur_angle = cur_angle.as_euler("xyz", degrees=False)[2]
+    fin_angle = fin_angle.as_euler("xyz", degrees=False)[2]
+    if abs(cur_angle - fin_angle) > eps["angle"]:
+        return False
     return True
