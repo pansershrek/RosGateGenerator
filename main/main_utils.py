@@ -60,7 +60,7 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
         for y in sorted(tmp_point[x].keys()):
             for z in sorted(tmp_point[x][y].keys()):
                 for k in sorted(tmp_point[x][y][z].keys()):
-                    coord_tensor.append(tmp_point[x][y][z][k])
+                    coord_tensor.append(float(tmp_point[x][y][z][k]))
     return coord_tensor, leg_contacs
 
 def create_tensor_from_trajectory_point_for_predict(point: dict) -> list:

@@ -44,8 +44,8 @@ class MyDatasetFull(Dataset):
             return data
         try:
             with open(self.idx2data[idx]["trajectory"], "rb") as f:
-                trajectory = pickle.load(f)
-                trajectory = yaml.safe_load(str(trajectory))
+                trajectory_raw = pickle.load(f)
+                trajectory = yaml.safe_load(str(trajectory_raw))
             with open(self.idx2data[idx]["generation"], "r") as f:
                 generation = json.load(f)
         except Exception as e:
