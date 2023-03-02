@@ -34,13 +34,13 @@ def main():
         config["TRAIN_TRAJECTORY_PATH"],
         config["TRAIN_GENERATION_PATH"],
         trajectory_max_len = 2369,
-        cache_size=300
+        cache_size=1000
     )
     val_dataset = MyDatasetFull(
         config["TEST_TRAJECTORY_PATH"],
         config["TEST_GENERATION_PATH"],
         trajectory_max_len = 2369,
-        cache_size=300
+        cache_size=1000
     )
 
     train_dataloader = DataLoader(
