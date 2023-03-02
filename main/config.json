@@ -1,5 +1,5 @@
 {
-    "EPOCHS": 5,
+    "EPOCHS": 1,
     "TRAIN_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file",
     "TRAIN_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/generation_logs_file",
     "TEST_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file",
@@ -10,7 +10,7 @@
     "LR": 0.003,
     "LOG_PATH": "logs",
     "BATCH_SIZE": 8,
-    "MODE": "INFERENCE",
+    "MODE": "TRAIN",
     "INFERENCE_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference_trajectory",
     "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints/checkpoint_0.pt",
     "INFERENCE_SHIFT": {

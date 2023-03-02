@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import traceback
 import pickle
 
 import torch
@@ -72,11 +73,16 @@ def main():
         with open(config["INFERENCE_TRAJECTORY_PATH"], "wb") as f:
             pickle.dump(ros_message, f)
     else:
-        train(
-            model, train_dataloader, val_dataloader, optimizer, loss_coord,
-            config["DEVICE"], writer, config["EPOCHS"], scheduler,
-            config["MODEL_CHECKPOINTS"]
-        )
+        try:
+            train(
+                model, train_dataloader, val_dataloader, optimizer, loss_coord,
+                config["DEVICE"], writer, config["EPOCHS"], scheduler,
+                config["MODEL_CHECKPOINTS"]
+            )
+        except Exception as e:
+            print(f"Exception {e}")
+            print(f"Traceback {traceback.format_exc()}")
+
 
 
 
