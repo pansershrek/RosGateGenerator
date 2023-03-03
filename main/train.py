@@ -11,10 +11,10 @@ def train(
     model, train_dataloader, val_dataloader, optimizer, criterion_coord,
     device, writer, epochs, scheduler, model_checkpoints
 ):
-    model.train()
     for epoch in range(epochs):
         losses = []
         logging.warning(f"Train epoch: {epoch}")
+        model.train()
         for step, trajectory in enumerate(train_dataloader):
             h, c = None, None
             for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
@@ -49,6 +49,7 @@ def train(
 
             if scheduler is not None:
                 scheduler.step()
+        logging.warning(f"Train loss is: {sum(losses)/len(losses)}")
         if writer is not None:
             writer.add_scalar(
                 "train/loss",

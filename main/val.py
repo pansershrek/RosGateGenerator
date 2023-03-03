@@ -84,6 +84,8 @@ def val(
                 torch.stack(real_final_point, dim=0)
             )
         )
+    logging.warning(f"Val loss is: {sum(losses) / len(losses)}")
+    logging.warning(f"Val final point dist is: {sum(losses_final_point) / len(losses_final_point)}")
 
     if writer is not None:
         writer.add_scalar(
