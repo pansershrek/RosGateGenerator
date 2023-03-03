@@ -64,7 +64,7 @@ def main():
 
     loss_coord = MSELoss()
     loss_contacs = BCELoss()
-    scheduler = StepLR(optimizer, step_size=len(train_dataset)*3, gamma=0.85)
+    scheduler = StepLR(optimizer, step_size=len(train_dataset), gamma=0.95)
 
     if config["MODE"] == "INFERENCE":
         #model.load_state_dict(torch.load(config["INFERENCE_MODEL_PATH"]))

@@ -31,7 +31,7 @@ def val(
                 trajectory["shift"].shape[1]
             ) // 2
             loss = criterion_coord(
-                predict_pointss[masks],
+                predict_points[masks],
                 trajectory["points"][
                     masks, trajectory_step_idx, - points_idx :
                 ].to(device)
