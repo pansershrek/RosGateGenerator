@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import logging
 
 import torch
 
@@ -13,7 +14,7 @@ def train(
     model.train()
     for epoch in range(epochs):
         losses = []
-        print(f"Start epoch: {epoch}")
+        logging.warning(f"Train epoch: {epoch}")
         for step, trajectory in enumerate(train_dataloader):
             h, c = None, None
             for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
@@ -46,27 +47,17 @@ def train(
 
                 losses.append(loss.item())
 
-                if scheduler is not None:
-                    scheduler.step()
-
-                if writer is not None:
-                    writer.add_scalar(
-                        "train/cur_loss",
-                        loss.item(),
-                        (
-                            epoch * trajectory["points"].shape[1] +
-                            trajectory_step_idx
-                        )
-                    )
-        val(
-            model, val_dataloader, criterion_coord,
-            device, writer, epoch
-        )
+            if scheduler is not None:
+                scheduler.step()
         if writer is not None:
             writer.add_scalar(
                 "train/loss",
                 sum(losses)/len(losses), epoch
             )
+        val(
+            model, val_dataloader, criterion_coord,
+            device, writer, epoch
+        )
         torch.save(
             model.state_dict(),
             os.path.join(model_checkpoints, f'checkpoint_{epoch}.pt')

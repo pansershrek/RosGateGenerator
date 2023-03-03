@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import logging
 
 import torch
 
@@ -12,7 +13,7 @@ def val(
     losses = []
     losses_final_point = []
     h, c = None, None
-
+    logging.warning(f"Val epoch: {epoch}")
     for step, trajectory in enumerate(val_dataloader):
         predict_final_point = []
         real_final_point = []
@@ -43,12 +44,7 @@ def val(
                 for masks_idx in range(len(masks)):
                     if masks[masks_idx] == True:
                         predict_final_point.append(
-                            predict_points.view(
-                                [
-                                    predict_points.shape[0],
-                                    predict_points.shape[2]
-                                ]
-                            )[masks_idx]
+                            predict_points[masks_idx]
                         )
                         real_final_point.append(
                             trajectory["points"][
@@ -68,12 +64,7 @@ def val(
                         masks_next[masks_idx] == False
                     ):
                         predict_final_point.append(
-                            predict_points.view(
-                                [
-                                    predict_points.shape[0],
-                                    predict_points.shape[2]
-                                ]
-                            )[masks_idx]
+                            predict_points[masks_idx]
                         )
                         real_final_point.append(
                             trajectory["points"][
