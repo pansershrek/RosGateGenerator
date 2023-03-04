@@ -161,3 +161,8 @@ def base_is_close(cur_base_position, fin_base_position, eps):
     if abs(cur_angle - fin_angle) > eps["angle"]:
         return False
     return True
+
+def quaternion_to_euler_torch(angle):
+    siny_cosp = 2 * (angle[:, 0] * angle[:,1])
+    cosy_cosp = 1 - 2 * (angle[:,1] * angle[:,1])
+    return torch.atan2(siny_cosp, cosy_cosp)
