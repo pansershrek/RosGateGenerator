@@ -39,7 +39,6 @@ def train(
                 target_point = trajectory["points"][
                     :, trajectory_step_idx, - points_idx :
                 ]
-
                 loss_full = criterion_coord(
                     predict_points[masks],
                     target_point[masks].to(device)

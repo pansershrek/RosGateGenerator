@@ -169,7 +169,11 @@ def quaternion_to_euler_torch(angle):
 
 def get_pred_base_points_and_angle(predict_points, masks):
     pred_base_points = predict_points[masks, :4]
-    pred_base_angle = pred_base_points[:, :2]
-    pred_base_points = pred_base_points[:, 2:]
+    if len(pred_base_points.shape) == 1:
+        pred_base_angle = pred_base_points[:2]
+        pred_base_points = pred_base_points[2:]
+    else:
+        pred_base_angle = pred_base_points[:, :2]
+        pred_base_points = pred_base_points[:, 2:]
 
     return pred_base_points, pred_base_angle
