@@ -132,8 +132,7 @@ def val(
             #c = c.detach()
 
             losses.append(loss.item())
-            print(f"LOSS {loss.item()}")
-            exit(0)
+
 
         losses_final_point.append(
             criterion_coord(
