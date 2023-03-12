@@ -15,7 +15,7 @@ class MyModel(nn.Module):
             num_layers = num_layers
         )
         self.fc1 = nn.Linear(hidden_size, output_size)
-        self.relu = nn.ReLU()
+        self.relu = nn.LeakyReLU()
 
     def forward(self, x, h, c):
         if h is not None and c is not None:

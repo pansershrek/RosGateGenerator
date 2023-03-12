@@ -166,3 +166,10 @@ def quaternion_to_euler_torch(angle):
     siny_cosp = 2 * (angle[:, 0] * angle[:,1])
     cosy_cosp = 1 - 2 * (angle[:,1] * angle[:,1])
     return torch.atan2(siny_cosp, cosy_cosp)
+
+def get_pred_base_points_and_angle(predict_points, masks):
+    pred_base_points = predict_points[masks, :4]
+    pred_base_angle = pred_base_points[:, :2]
+    pred_base_points = pred_base_points[:, 2:]
+
+    return pred_base_points, pred_base_angle

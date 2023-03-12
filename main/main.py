@@ -6,7 +6,7 @@ import pickle
 import torch
 from torch.utils.tensorboard import SummaryWriter
 import torch.optim as optim
-from torch.nn import MSELoss, BCELoss
+from torch.nn import MSELoss, BCELoss, L1Loss
 from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 
@@ -48,21 +48,20 @@ def main():
         batch_size = config["BATCH_SIZE"],
         shuffle = True,
         num_workers = 16,
-        drop_last = True
     )
     val_dataloader = DataLoader(
         val_dataset,
         batch_size = config["BATCH_SIZE"],
         shuffle = False,
         num_workers = 16,
-        drop_last = True
     )
 
     model = MyModel(2 * 35 + 3, 35, 256, 5)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"]) # Maybe use LBFGS???
 
-    loss_coord = MSELoss()
+    loss_coord = L1Loss()
+    loss_angle = MSELoss()
     loss_contacs = BCELoss()
     scheduler = StepLR(optimizer, step_size=len(train_dataset) * 3, gamma=0.95)
 
@@ -79,9 +78,9 @@ def main():
     else:
         try:
             train(
-                model, train_dataloader, val_dataloader, optimizer, loss_coord,
-                config["DEVICE"], writer, config["EPOCHS"], scheduler,
-                config["MODEL_CHECKPOINTS"]
+                model, train_dataloader, val_dataloader, optimizer,
+                loss_coord, loss_angle, config["DEVICE"], writer,
+                config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]
             )
         except Exception as e:
             print(f"Exception {e}")
