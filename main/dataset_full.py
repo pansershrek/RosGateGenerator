@@ -109,8 +109,11 @@ class MyDatasetFull(Dataset):
                 idx_tmp >= self.trajectory_max_len
             ):
                 break
+            #data["points"].append(
+            #    create_full_trajectoy_point(data["shift"], points[0], x)
+            #)
             data["points"].append(
-                create_full_trajectoy_point(data["shift"], points[0], x)
+                create_full_trajectoy_point(data["shift"], None, x)
             )
             if (
                 self.trajectory_max_len is not None and

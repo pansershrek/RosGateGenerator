@@ -56,7 +56,8 @@ def main():
         num_workers = 16,
     )
 
-    model = MyModel(2 * 35 + 3, 35, 256, 2)
+    #model = MyModel(2 * 35 + 3, 35, 256, 1)
+    model = MyModel(35 + 3, 35, 256, 1)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"]) # Maybe use LBFGS???
 
@@ -66,8 +67,7 @@ def main():
     scheduler = StepLR(optimizer, step_size=len(train_dataset) * 3, gamma=0.95)
 
     if config["MODE"] == "INFERENCE":
-        #model.load_state_dict(torch.load(config["INFERENCE_MODEL_PATH"]))
-        model.eval()
+        model.load_state_dict(torch.load(config["INFERENCE_MODEL_PATH"]))
         inference_points = inference(
             model, config["INFERENCE_START_POINT"],
             config["INFERENCE_SHIFT"], config["DEVICE"]

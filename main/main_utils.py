@@ -87,10 +87,14 @@ def create_tensor_from_trajectory_point_for_predict(point: dict) -> list:
     return create_tensor_from_trajectory_point(tmp_point)
 
 def create_full_trajectoy_point(shift, start_point, cur_point):
+    if start_point is not None:
+        return (
+            shift +
+            create_tensor_from_trajectory_point(start_point)[0] +
+            create_tensor_from_trajectory_point(cur_point)[0]
+        )
     return (
-        shift +
-        create_tensor_from_trajectory_point(start_point)[0] +
-        create_tensor_from_trajectory_point(cur_point)[0]
+        shift + create_tensor_from_trajectory_point(cur_point)[0]
     )
 
 def remove_state_part_from_trajectory_point(
@@ -148,18 +152,24 @@ def get_final_base_position(base_position, shift):
     final_position["w"] = final_rot.as_quat()[3]
     return final_position
 
-def base_is_close(cur_base_position, fin_base_position, eps):
+def base_distance(cur_base_position, fin_base_position):
+    dist = {}
     for key in cur_base_position.keys():
         if key == "x" or key == "y":
-            if abs(cur_base_position[key] - fin_base_position[key]) > eps[key]:
-                return False
+            dist[key] = abs(cur_base_position[key] - fin_base_position[key])
+
     cur_angle = Rotation.from_quat([0, 0, cur_base_position["z"], cur_base_position["w"]])
     fin_angle = Rotation.from_quat([0, 0, fin_base_position["z"], fin_base_position["w"]])
 
     cur_angle = cur_angle.as_euler("xyz", degrees=False)[2]
     fin_angle = fin_angle.as_euler("xyz", degrees=False)[2]
-    if abs(cur_angle - fin_angle) > eps["angle"]:
-        return False
+    dist["angle"] = abs(cur_angle - fin_angle)
+    return dist
+
+def is_close(dist, eps):
+    for k in dist.keys():
+        if dist[k] > eps[k]:
+            return False
     return True
 
 def quaternion_to_euler_torch(angle):

@@ -28,6 +28,7 @@ def val(
         real_final_angle_base = []
         h, c = None, None
         for trajectory_step_idx in range(1, trajectory["points"].shape[1]):
+            logging.warning(f"Val step: {trajectory_step_idx}")
             masks = (trajectory["masks"][:, trajectory_step_idx] == 1.0).view(-1)
             if int(sum(masks)) == 0:
                 break
@@ -42,6 +43,7 @@ def val(
                 trajectory["points"].shape[2] -
                 trajectory["shift"].shape[1]
             ) // 2
+            points_idx = 35
             target_point = trajectory["points"][
                 :, trajectory_step_idx, - points_idx :
             ]

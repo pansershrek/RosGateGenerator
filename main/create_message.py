@@ -4,6 +4,8 @@ import math
 import time
 
 from sweetie_bot_control_msgs.msg import FollowStepSequenceActionGoal
+from sweetie_bot_control_msgs.msg import RigidBodyTrajectory
+from sweetie_bot_control_msgs.msg import RigidBodyTrajectoryPoint
 
 from main_utils import remove_state_part_from_trajectory_point
 from message_templates import BASE_MOTION_TEMPLATE, LEG_TEMPLATE
@@ -76,7 +78,67 @@ def create_message(trajectory_points):
                 contact_stack[point_idx][idx]
             )
 
-    message.goal.base_motion = steps["base_motion"]
-    message.goal.ee_motion = steps["ee_motion"]
+    base_motion = RigidBodyTrajectory()
+    base_motion.name = "base_link"
+
+    tmp = []
+    for x in steps["base_motion"]["points"]:
+        base_RigidBodyTrajectoryPoint = RigidBodyTrajectoryPoint()
+        base_RigidBodyTrajectoryPoint.contact = x["contact"]
+        base_RigidBodyTrajectoryPoint.pose.position.x = x["pose"]["position"]["x"]
+        base_RigidBodyTrajectoryPoint.pose.position.y = x["pose"]["position"]["y"]
+        base_RigidBodyTrajectoryPoint.pose.position.z = x["pose"]["position"]["z"]
+        base_RigidBodyTrajectoryPoint.pose.orientation.x = x["pose"]["orientation"]["x"]
+        base_RigidBodyTrajectoryPoint.pose.orientation.y = x["pose"]["orientation"]["y"]
+        base_RigidBodyTrajectoryPoint.pose.orientation.z = x["pose"]["orientation"]["z"]
+        base_RigidBodyTrajectoryPoint.pose.orientation.w = x["pose"]["orientation"]["w"]
+        base_RigidBodyTrajectoryPoint.twist.linear.x = x["twist"]["linear"]["x"]
+        base_RigidBodyTrajectoryPoint.twist.linear.y = x["twist"]["linear"]["y"]
+        base_RigidBodyTrajectoryPoint.twist.linear.z = x["twist"]["linear"]["z"]
+        base_RigidBodyTrajectoryPoint.twist.angular.x = x["twist"]["angular"]["x"]
+        base_RigidBodyTrajectoryPoint.twist.angular.y = x["twist"]["angular"]["y"]
+        base_RigidBodyTrajectoryPoint.twist.angular.z = x["twist"]["angular"]["z"]
+        base_RigidBodyTrajectoryPoint.accel.linear.x = x["accel"]["linear"]["x"]
+        base_RigidBodyTrajectoryPoint.accel.linear.y = x["accel"]["linear"]["y"]
+        base_RigidBodyTrajectoryPoint.accel.linear.z = x["accel"]["linear"]["z"]
+        base_RigidBodyTrajectoryPoint.accel.angular.x = x["accel"]["angular"]["x"]
+        base_RigidBodyTrajectoryPoint.accel.angular.y = x["accel"]["angular"]["y"]
+        base_RigidBodyTrajectoryPoint.accel.angular.z = x["accel"]["angular"]["z"]
+        tmp.append(base_RigidBodyTrajectoryPoint)
+    base_motion.points = tmp
+    message.goal.base_motion = base_motion
+
+    all_legs = []
+    for leg, leg_name in zip(steps["ee_motion"], LEGS_ORDER):
+        ee_motion = RigidBodyTrajectory()
+        ee_motion.name = leg_name
+        tmp = []
+        for x in leg["points"]:
+            leg_RigidBodyTrajectoryPoint = RigidBodyTrajectoryPoint()
+            leg_RigidBodyTrajectoryPoint.contact = x["contact"]
+            leg_RigidBodyTrajectoryPoint.pose.position.x = x["pose"]["position"]["x"]
+            leg_RigidBodyTrajectoryPoint.pose.position.y = x["pose"]["position"]["y"]
+            leg_RigidBodyTrajectoryPoint.pose.position.z = x["pose"]["position"]["z"]
+            leg_RigidBodyTrajectoryPoint.pose.orientation.x = x["pose"]["orientation"]["x"]
+            leg_RigidBodyTrajectoryPoint.pose.orientation.y = x["pose"]["orientation"]["y"]
+            leg_RigidBodyTrajectoryPoint.pose.orientation.z = x["pose"]["orientation"]["z"]
+            leg_RigidBodyTrajectoryPoint.pose.orientation.w = x["pose"]["orientation"]["w"]
+            leg_RigidBodyTrajectoryPoint.twist.linear.x = x["twist"]["linear"]["x"]
+            leg_RigidBodyTrajectoryPoint.twist.linear.y = x["twist"]["linear"]["y"]
+            leg_RigidBodyTrajectoryPoint.twist.linear.z = x["twist"]["linear"]["z"]
+            leg_RigidBodyTrajectoryPoint.twist.angular.x = x["twist"]["angular"]["x"]
+            leg_RigidBodyTrajectoryPoint.twist.angular.y = x["twist"]["angular"]["y"]
+            leg_RigidBodyTrajectoryPoint.twist.angular.z = x["twist"]["angular"]["z"]
+            leg_RigidBodyTrajectoryPoint.accel.linear.x = x["accel"]["linear"]["x"]
+            leg_RigidBodyTrajectoryPoint.accel.linear.y = x["accel"]["linear"]["y"]
+            leg_RigidBodyTrajectoryPoint.accel.linear.z = x["accel"]["linear"]["z"]
+            leg_RigidBodyTrajectoryPoint.accel.angular.x = x["accel"]["angular"]["x"]
+            leg_RigidBodyTrajectoryPoint.accel.angular.y = x["accel"]["angular"]["y"]
+            leg_RigidBodyTrajectoryPoint.accel.angular.z = x["accel"]["angular"]["z"]
+            tmp.append(leg_RigidBodyTrajectoryPoint)
+        ee_motion.points = tmp
+        all_legs.append(ee_motion)
+
+    message.goal.ee_motion = all_legs
 
     return message

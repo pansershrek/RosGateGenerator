@@ -39,6 +39,7 @@ def train(
                         trajectory["points"].shape[2] -
                         trajectory["shift"].shape[1]
                     ) // 2
+                    points_idx = 35
                     target_point = trajectory["points"][
                         :, trajectory_step_idx, - points_idx :
                     ]

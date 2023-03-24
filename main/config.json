@@ -9,10 +9,10 @@
     "SEED": 1717,
     "LR": 0.003,
     "LOG_PATH": "logs",
-    "BATCH_SIZE": 100,
-    "MODE": "TRAIN",
+    "BATCH_SIZE": 300,
+    "MODE": "INFERENCE",
     "INFERENCE_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference_trajectory",
-    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints/checkpoint_0.pt",
+    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference/checkpoint_5.pt",
     "INFERENCE_SHIFT": {
         "x": 1.9,
         "y": 0.2,
