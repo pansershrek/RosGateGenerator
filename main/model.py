@@ -29,3 +29,23 @@ class MyModel(nn.Module):
                 output, (h, c) = self.lstm(x[:, idx])
         output = self.fc1(self.relu(output))
         return output, h, c
+
+
+class MyModelFF(nn.Module):
+    def __init__(
+        self, input_size: int = 2 * 35 + 3,
+        output_size: int = 35, hidden_size: int = 256,
+        num_layers: int = 3
+    ):
+        super().__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.LeakyReLU()
+        self.fc2 = nn.Linear(hidden_size, output_size)
+        self.bn = nn.BatchNorm1d(hidden_size)
+
+    def forward(self, x):
+        output = self.fc1(x)
+        output = self.bn(output)
+        output = self.relu(output)
+        output = self.fc2(output)
+        return output

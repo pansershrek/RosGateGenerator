@@ -103,7 +103,11 @@ def remove_state_part_from_trajectory_point(
     return point[shift_part + start_point_part: ]
 
 def create_shift_tesor(shift: dict):
-    return [shift["x"], shift["y"], shift["angle"]]
+    shift_rot = Rotation.from_euler("xyz", [0, 0, shift["angle"]], degrees=False)
+    return [
+        shift["x"], shift["y"],
+        shift_rot.as_quat()[2], shift_rot.as_quat()[3]
+    ]
 
 def setup_seed(seed: int=1717) -> None:
     random.seed(seed)

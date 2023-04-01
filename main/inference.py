@@ -40,5 +40,6 @@ def inference(
             ans.append(predict_point)
             cur_base_position = get_base_position(predict_point)
             dist = base_distance(cur_base_position, final_base_position)
+            cur_point = predict_point
 
     return ans

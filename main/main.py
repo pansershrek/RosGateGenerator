@@ -11,9 +11,10 @@ from torch.optim.lr_scheduler import StepLR
 from torch.utils.data import DataLoader
 
 from train import train
+from train_ff import train_ff
 from dataset_full import MyDatasetFull
-from model import MyModel
-from main_utils import get_config, setup_seed
+from model import MyModel, MyModelFF
+from main_utils import get_config, setup_seed, LRUCache
 from create_message import create_message
 from inference import inference
 
@@ -55,9 +56,9 @@ def main():
         shuffle = False,
         num_workers = 16,
     )
-
     #model = MyModel(2 * 35 + 3, 35, 256, 1)
-    model = MyModel(35 + 3, 35, 256, 1)
+    #model = MyModelFF(35 + 3, 35, 256, 1)
+    model = MyModelFF(35 + 4, 35, 256, 5)
     model = model.to(config["DEVICE"])
     optimizer = optim.Adam(model.parameters(), lr=config["LR"]) # Maybe use LBFGS???
 
@@ -77,7 +78,7 @@ def main():
             pickle.dump(ros_message, f)
     else:
         try:
-            train(
+            train_ff(
                 model, train_dataloader, val_dataloader, optimizer,
                 loss_coord, loss_angle, config["DEVICE"], writer,
                 config["EPOCHS"], scheduler, config["MODEL_CHECKPOINTS"]

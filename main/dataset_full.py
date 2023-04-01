@@ -8,6 +8,8 @@ import logging
 
 import torch
 from torch.utils.data import Dataset
+import tf_conversions
+from geometry_msgs.msg import Pose
 
 from main_utils import create_tensor_from_trajectory_point, create_shift_tesor
 from main_utils import LRUCache, create_full_trajectoy_point
@@ -36,8 +38,6 @@ class MyDatasetFull(Dataset):
         return len(self.idx2data)
 
     def __getitem__(self, idx: int):
-        if idx >= self.__len__():
-            raise StopIteration
 
         data, exist = self.cacher.get(idx)
         if exist:
