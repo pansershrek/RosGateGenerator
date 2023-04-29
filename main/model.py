@@ -34,7 +34,7 @@ class MyModel(nn.Module):
 class MyModelFF(nn.Module):
     def __init__(
         self, input_size: int = 2 * 35 + 3,
-        output_size: int = 35, hidden_size: int = 256,
+        output_size: int = 35, hidden_size: int = 1024,
         num_layers: int = 3
     ):
         super().__init__()

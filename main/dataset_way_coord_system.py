@@ -76,6 +76,15 @@ class MyDatasetFull(Dataset):
             "mask": 0,
         }
 
+        with open("inspect/base_motion", "w") as f:
+            for x in range(10):
+                print(f"Step: {x}", file=f)
+                print(trajectory.goal.base_motion.points[x], file=f)
+        with open("inspect/leg_1", "w") as f:
+            for x in range(10):
+                print(f"Step: {x}", file=f)
+                print(trajectory.goal.ee_motion[0].points[x], file=f)
+
         if pose_idx >= len(trajectory.goal.base_motion.points) - 1:
             return data
 
@@ -90,7 +99,7 @@ class MyDatasetFull(Dataset):
         T0inv = T0.Inverse()
 
         f_base_motion.pose = tfconv.toMsg(T0inv * T0)
-        t_base_motion.pose = tfconv.toMsg(T0inv * T1)
+        t_base_motion.pose = tfconv.toMsg(T0inv * T1) # To inverse use T0 *T1_new
 
         T0_twist = Twist(
             Vector(

@@ -45,7 +45,9 @@ class MyDatasetFull(Dataset):
         try:
             with open(self.idx2data[idx]["trajectory"], "rb") as f:
                 trajectory_raw = pickle.load(f)
-                trajectory = yaml.safe_load(str(trajectory_raw))
+                #print(trajectory_raw)
+                #trajectory = yaml.load(str(trajectory_raw), Loader=yaml.CBaseLoader)
+                trajectory = trajectory_raw
             with open(self.idx2data[idx]["generation"], "r") as f:
                 generation = json.load(f)
         except Exception as e:
@@ -65,38 +67,77 @@ class MyDatasetFull(Dataset):
             "masks": []
         }
         points = []
-
-        for x in trajectory["goal"]["base_motion"]["points"]:
+        for x in trajectory.goal.base_motion.points:
+            y = {
+                "pose": {
+                    "position": {
+                        "x": x.pose.position.x,
+                        "y": x.pose.position.y,
+                    },
+                    "orientation": {
+                        "z": x.pose.orientation.z,
+                        "w": x.pose.orientation.w,
+                    }
+                },
+                "twist": {
+                    "linear": {
+                        "x": x.twist.linear.x,
+                        "y": x.twist.linear.y,
+                    },
+                    "angular": {
+                        "z": x.twist.angular.z,
+                    }
+                }
+            }
             points.append(
                 {
                     "step": len(points),
-                    "base_motion": x
+                    "base_motion": y
                 }
             )
             # Remove constant parameters
-            points[-1]["base_motion"].pop("accel", None)
-            points[-1]["base_motion"]["pose"]["position"].pop("z", None)
-            points[-1]["base_motion"]["pose"]["orientation"].pop("x", None)
-            points[-1]["base_motion"]["pose"]["orientation"].pop("y", None)
-            points[-1]["base_motion"]["twist"]["linear"].pop("z", None)
-            points[-1]["base_motion"]["twist"]["angular"].pop("x", None)
-            points[-1]["base_motion"]["twist"]["angular"].pop("y", None)
+            #points[-1]["base_motion"].pop("accel", None)
+            #points[-1]["base_motion"]["pose"]["position"].pop("z", None)
+            #points[-1]["base_motion"]["pose"]["orientation"].pop("x", None)
+            #points[-1]["base_motion"]["pose"]["orientation"].pop("y", None)
+            #points[-1]["base_motion"]["twist"]["linear"].pop("z", None)
+            #points[-1]["base_motion"]["twist"]["angular"].pop("x", None)
+            #points[-1]["base_motion"]["twist"]["angular"].pop("y", None)
 
-        for leg_position in trajectory["goal"]["ee_motion"]:
-            for idx_tmp, x in enumerate(leg_position["points"]):
-                points[idx_tmp][leg_position["name"]] = x
+        for leg_position in trajectory.goal.ee_motion:
+            for idx_tmp, x in enumerate(leg_position.points):
+                y = {
+                    "pose": {
+                        "position": {
+                            "x": x.pose.position.x,
+                            "y": x.pose.position.y,
+                            "z": x.pose.position.z,
+                        }
+                    },
+                    "twist": {
+                        "linear": {
+                            "x": x.twist.linear.x,
+                            "y": x.twist.linear.y,
+                            "z": x.twist.linear.z,
+                        },
+                        "angular": {
+                            "z": x.twist.angular.z,
+                        }
+                    }
+                }
+                points[idx_tmp][leg_position.name] = y
 
                 # Remove constant parameters
-                points[idx_tmp][leg_position["name"]].pop("accel", None)
-                points[idx_tmp][leg_position["name"]]["pose"].pop(
-                    "orientation", None
-                )
-                points[idx_tmp][leg_position["name"]]["twist"]["angular"].pop(
-                    "x", None
-                )
-                points[idx_tmp][leg_position["name"]]["twist"]["angular"].pop(
-                    "y", None
-                )
+                #points[idx_tmp][leg_position["name"]].pop("accel", None)
+                #points[idx_tmp][leg_position["name"]]["pose"].pop(
+                #    "orientation", None
+                #)
+                #points[idx_tmp][leg_position["name"]]["twist"]["angular"].pop(
+                #    "x", None
+                #)
+                #points[idx_tmp][leg_position["name"]]["twist"]["angular"].pop(
+                #    "y", None
+                #)
 
         data["start_point"] = create_tensor_from_trajectory_point(
             points[0]

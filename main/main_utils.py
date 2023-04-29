@@ -191,3 +191,65 @@ def get_pred_base_points_and_angle(predict_points, masks):
         pred_base_points = pred_base_points[:, 2:]
 
     return pred_base_points, pred_base_angle
+
+def get_point_from_trajectory_by_idx(trajectory, idx):
+    ans = [
+        # Base motion
+        trajectory.goal.base_motion.points[idx].pose.orientation.w,
+        trajectory.goal.base_motion.points[idx].pose.orientation.z,
+        trajectory.goal.base_motion.points[idx].pose.position.x,
+        trajectory.goal.base_motion.points[idx].pose.position.y,
+        trajectory.goal.base_motion.points[idx].twist.angular.z,
+        trajectory.goal.base_motion.points[idx].twist.linear.x,
+        trajectory.goal.base_motion.points[idx].twist.linear.y,
+        # Leg1
+        trajectory.goal.ee_motion[0].points[idx].pose.position.x,
+        trajectory.goal.ee_motion[0].points[idx].pose.position.y,
+        trajectory.goal.ee_motion[0].points[idx].pose.position.z,
+        trajectory.goal.ee_motion[0].points[idx].twist.angular.z,
+        trajectory.goal.ee_motion[0].points[idx].twist.linear.x,
+        trajectory.goal.ee_motion[0].points[idx].twist.linear.y,
+        trajectory.goal.ee_motion[0].points[idx].twist.linear.z,
+        # Leg2
+        trajectory.goal.ee_motion[1].points[idx].pose.position.x,
+        trajectory.goal.ee_motion[1].points[idx].pose.position.y,
+        trajectory.goal.ee_motion[1].points[idx].pose.position.z,
+        trajectory.goal.ee_motion[1].points[idx].twist.angular.z,
+        trajectory.goal.ee_motion[1].points[idx].twist.linear.x,
+        trajectory.goal.ee_motion[1].points[idx].twist.linear.y,
+        trajectory.goal.ee_motion[1].points[idx].twist.linear.z,
+        # Leg3
+        trajectory.goal.ee_motion[2].points[idx].pose.position.x,
+        trajectory.goal.ee_motion[2].points[idx].pose.position.y,
+        trajectory.goal.ee_motion[2].points[idx].pose.position.z,
+        trajectory.goal.ee_motion[2].points[idx].twist.angular.z,
+        trajectory.goal.ee_motion[2].points[idx].twist.linear.x,
+        trajectory.goal.ee_motion[2].points[idx].twist.linear.y,
+        trajectory.goal.ee_motion[2].points[idx].twist.linear.z,
+        # Leg4
+        trajectory.goal.ee_motion[3].points[idx].pose.position.x,
+        trajectory.goal.ee_motion[3].points[idx].pose.position.y,
+        trajectory.goal.ee_motion[3].points[idx].pose.position.z,
+        trajectory.goal.ee_motion[3].points[idx].twist.angular.z,
+        trajectory.goal.ee_motion[3].points[idx].twist.linear.x,
+        trajectory.goal.ee_motion[3].points[idx].twist.linear.y,
+        trajectory.goal.ee_motion[3].points[idx].twist.linear.z,
+    ]
+    return ans
+
+def get_trajectory_phrame(trajectory, idx):
+    ans = []
+    #for phrame_idx in range(idx + 1, idx + 20):
+    for phrame_idx in range(idx + 1, idx + 6):
+        tmp_point = get_point_from_trajectory_by_idx(
+            trajectory, phrame_idx
+        )
+        ans += tmp_point
+        #ans += (
+        #    tmp_point[: 7] +
+        #    tmp_point[7: 9] +
+        #    tmp_point[14: 16] +
+        #    tmp_point[21: 23] +
+        #    tmp_point[28: 30]
+        #) # Do we have to predict only x,y or x,y,z of a leg?
+    return ans

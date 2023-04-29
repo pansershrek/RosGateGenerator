@@ -1,61 +1,61 @@
 {
-    "EPOCHS": 8,
-    "TRAIN_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/trajectory_logs_file",
-    "TRAIN_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1/generation_logs_file",
-    "TEST_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1_test/trajectory_logs_file",
-    "TEST_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/trajectories/full_trajectory_1_test/generation_logs_file",
+    "EPOCHS": 64,
+    "TRAIN_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/new_trajectories/full_trajectory_1/trajectory_logs_file",
+    "TRAIN_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/new_trajectories/full_trajectory_1/generation_logs_file",
+    "TEST_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/new_trajectories/full_trajectory_1_test/trajectory_logs_file",
+    "TEST_GENERATION_PATH": "/home/panser/Desktop/RosGateGenerator/new_trajectories/full_trajectory_1_test/generation_logs_file",
     "MODEL_CHECKPOINTS": "/home/panser/Desktop/RosGateGenerator/main/model_checkpoints",
     "DEVICE": "cuda",
     "SEED": 1717,
     "LR": 0.003,
     "LOG_PATH": "logs",
-    "BATCH_SIZE": 300,
-    "MODE": "INFERENCE",
+    "BATCH_SIZE": 800,
+    "MODE": "TRAIN",
     "INFERENCE_TRAJECTORY_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference_trajectory",
-    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference/checkpoint_5.pt",
+    "INFERENCE_MODEL_PATH": "/home/panser/Desktop/RosGateGenerator/main/inference/checkpoint_62.pt",
     "INFERENCE_SHIFT": {
-        "x": 1.9,
-        "y": 0.2,
-        "angle": -4.694935687864747
+        "x": -0.4,
+        "y": -0.0,
+        "angle": 0
     },
     "INFERENCE_START_POINT": {
         "step": 0,
         "base_motion": {
             "pose": {
                 "position": {
-                    "x": -1.3530843112623173e-16,
-                    "y": -3.0392355299113637e-15,
-                    "z": 0.22365788448808482
+                    "x": -0.47617821630041013,
+                    "y": -0.5274989366585486,
+                    "z": 0.21500000000000014
                 },
                 "orientation": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": -4.407303405738079e-15,
-                    "w": 1.0
+                    "z": 0.20176084662251711,
+                    "w": 0.9794348170093633
                 }
             },
             "twist": {
                 "linear": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": -0.00011574711882466314
+                    "x": -0.16064751680949246,
+                    "y": 0.08650169189366377,
+                    "z": -2.2361090521801576e-17
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": 0.20481455336095053
                 }
             },
             "accel": {
                 "linear": {
-                    "x": 0.898957144550804,
-                    "y": -0.02865356300291391,
-                    "z": -1.7392893781453231e-15
+                    "x": -0.6885062594366416,
+                    "y": 0.2974658375709952,
+                    "z": 6.431858912760743e-16
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": -0.4473738291300291
+                    "z": 0.9816600387287272
                 }
             },
             "contact": false
@@ -63,9 +63,9 @@
         "leg1": {
             "pose": {
                 "position": {
-                    "x": 0.08042578395038145,
-                    "y": 0.038600000000014664,
-                    "z": -0.19365788448808482
+                    "x": 0.08672182066575763,
+                    "y": 0.034277207071480534,
+                    "z": -0.18500000000000005
                 },
                 "orientation": {
                     "x": 0.0,
@@ -76,26 +76,26 @@
             },
             "twist": {
                 "linear": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.00011574711882466314
+                    "x": 0.052682922187568614,
+                    "y": -0.010663112043009938,
+                    "z": 2.2361090521801567e-17
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": -0.20481455336095045
                 }
             },
             "accel": {
                 "linear": {
-                    "x": -0.8989571445508029,
-                    "y": 0.028653563002905925,
-                    "z": 1.7392893781453231e-15
+                    "x": 0.22396536614417387,
+                    "y": 0.0886831051601231,
+                    "z": -6.431858912760741e-16
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.4473738291300291
+                    "z": -0.9816600387287269
                 }
             },
             "contact": true
@@ -103,9 +103,9 @@
         "leg3": {
             "pose": {
                 "position": {
-                    "x": -0.08042421604961855,
-                    "y": 0.0386000000000023,
-                    "z": -0.19365788448808482
+                    "x": -0.0749397995000754,
+                    "y": -0.03812113934980912,
+                    "z": -0.18500000000000005
                 },
                 "orientation": {
                     "x": 0.0,
@@ -116,26 +116,26 @@
             },
             "twist": {
                 "linear": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.00011574711882466314
+                    "x": 0.052682922187568614,
+                    "y": -0.010663112043009938,
+                    "z": 2.2361090521801567e-17
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": -0.20481455336095045
                 }
             },
             "accel": {
                 "linear": {
-                    "x": -0.8989571445508029,
-                    "y": 0.028653563002905925,
-                    "z": 1.7392893781453231e-15
+                    "x": 0.22396536614417387,
+                    "y": 0.0886831051601231,
+                    "z": -6.431858912760741e-16
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.4473738291300291
+                    "z": -0.9816600387287269
                 }
             },
             "contact": true
@@ -143,9 +143,9 @@
         "leg4": {
             "pose": {
                 "position": {
-                    "x": -0.08042421604961912,
-                    "y": -0.03859999999999847,
-                    "z": -0.19365788448808482
+                    "x": 0.08497434435965527,
+                    "y": -0.041685566757951036,
+                    "z": -0.1849618359454509
                 },
                 "orientation": {
                     "x": 0.0,
@@ -156,26 +156,26 @@
             },
             "twist": {
                 "linear": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.00011574711882466314
+                    "x": 0.02486194787590214,
+                    "y": 0.00038932677371646444,
+                    "z": 0.02317321392224699
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": -0.20481455336095045
                 }
             },
             "accel": {
                 "linear": {
-                    "x": -0.8989571445508029,
-                    "y": 0.028653563002905925,
-                    "z": 1.7392893781453231e-15
+                    "x": -8.092588841351462,
+                    "y": 3.392600700374933,
+                    "z": 6.891105231019744
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.4473738291300291
+                    "z": -0.9816600387287269
                 }
             },
             "contact": true
@@ -183,9 +183,9 @@
         "leg2": {
             "pose": {
                 "position": {
-                    "x": 0.08042578395038076,
-                    "y": -0.0385999999999999,
-                    "z": -0.19365788448808482
+                    "x": -0.07328397489056347,
+                    "y": 0.03784111242348701,
+                    "z": -0.1849618359454509
                 },
                 "orientation": {
                     "x": 0.0,
@@ -196,26 +196,26 @@
             },
             "twist": {
                 "linear": {
-                    "x": 0.0,
-                    "y": 0.0,
-                    "z": 0.00011574711882466314
+                    "x": 0.024759566794486033,
+                    "y": -0.022033075496287698,
+                    "z": 0.02317321392224699
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.0
+                    "z": -0.20481455336095045
                 }
             },
             "accel": {
                 "linear": {
-                    "x": -0.8989571445508029,
-                    "y": 0.028653563002905925,
-                    "z": 1.7392893781453231e-15
+                    "x": -8.123193729731023,
+                    "y": -3.31015247612203,
+                    "z": 6.891105231019744
                 },
                 "angular": {
                     "x": 0.0,
                     "y": 0.0,
-                    "z": 0.4473738291300291
+                    "z": -0.9816600387287269
                 }
             },
             "contact": true

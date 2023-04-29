@@ -26,17 +26,17 @@ def create_message(trajectory_points):
         f"{message.goal_id.stamp.nsecs}"
     )
     message.goal.header.frame_id = "odom_combined"
-    message.goal.header.seq = 0
+    message.goal.header.seq = 1
     message.goal.header.stamp.secs = message.header.stamp.secs
     message.goal.header.stamp.nsecs = message.header.stamp.nsecs
     message.goal.append = False
-    message.goal.position_tolerance = 0.07
-    message.goal.orientation_tolerance = 0.5
+    message.goal.position_tolerance = 1
+    message.goal.orientation_tolerance = 1
 
     points_len = len(trajectory_points)
     time_from_start = [0]
     for idx in range(points_len - 1):
-        time_from_start.append(time_from_start[-1] + 0.056)
+        time_from_start.append(time_from_start[-1] + 0.0375)
     message.goal.time_from_start = time_from_start
 
     steps = {
