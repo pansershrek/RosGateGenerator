@@ -20,7 +20,7 @@ def create_message(trajectory_points):
         (ts - math.floor(ts)) * 10 ** 7
     )
     message.goal_id.stamp.secs = message.header.stamp.secs
-    message.goal_id.stamp.nsecs = message.header.stamp.nsecs + 200
+    message.goal_id.stamp.nsecs = message.header.stamp.nsecs + 800
     message.goal_id.id = (
         f"/clop_generator-1-{message.goal_id.stamp.secs}."
         f"{message.goal_id.stamp.nsecs}"
@@ -55,6 +55,8 @@ def create_message(trajectory_points):
         step = { x: copy.deepcopy(LEG_TEMPLATE) for x in LEGS_ORDER }
         step["base_motion"] = copy.deepcopy(BASE_MOTION_TEMPLATE)
         for k, v in zip(MESSAGE_ORDER, point):
+            #if k[2] == "position" and k[3] == "z":
+            #    print(k, v)
             step[k[0]][k[1]][k[2]][k[3]] = v
         steps["base_motion"]["points"].append(step["base_motion"])
         for idx in range(len(LEGS_ORDER)):
@@ -112,10 +114,11 @@ def create_message(trajectory_points):
     for leg, leg_name in zip(steps["ee_motion"], LEGS_ORDER):
         ee_motion = RigidBodyTrajectory()
         ee_motion.name = leg_name
+        #print(ee_motion.name)
         tmp = []
         for x in leg["points"]:
             leg_RigidBodyTrajectoryPoint = RigidBodyTrajectoryPoint()
-            leg_RigidBodyTrajectoryPoint.contact = x["contact"]
+            #leg_RigidBodyTrajectoryPoint.contact = x["contact"]
             leg_RigidBodyTrajectoryPoint.pose.position.x = x["pose"]["position"]["x"]
             leg_RigidBodyTrajectoryPoint.pose.position.y = x["pose"]["position"]["y"]
             leg_RigidBodyTrajectoryPoint.pose.position.z = x["pose"]["position"]["z"]

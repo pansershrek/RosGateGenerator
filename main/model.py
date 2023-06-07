@@ -31,6 +31,29 @@ class MyModel(nn.Module):
         return output, h, c
 
 
+class MyModelFF_head(nn.Module):
+    def __init__(
+        self, input_size: int = 2 * 35 + 3,
+        output_size: int = 35, hidden_size: int = 1024,
+        num_layers: int = 3
+    ):
+        super().__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.LeakyReLU()
+        self.fc2 = nn.Linear(hidden_size, hidden_size)
+        self.fc3 = nn.Linear(hidden_size, output_size)
+        #self.bn = nn.BatchNorm1d(hidden_size)
+        self.dp = nn.Dropout(p=0.3)
+
+    def forward(self, x):
+        output = self.fc1(x)
+        #output = self.bn(output)
+        output = self.relu(output)
+        output = self.fc2(output)
+        output = self.relu(output)
+        output = self.fc3(output)
+        return output
+
 class MyModelFF(nn.Module):
     def __init__(
         self, input_size: int = 2 * 35 + 3,
@@ -41,11 +64,12 @@ class MyModelFF(nn.Module):
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.LeakyReLU()
         self.fc2 = nn.Linear(hidden_size, output_size)
-        self.bn = nn.BatchNorm1d(hidden_size)
+        #self.bn = nn.BatchNorm1d(hidden_size)
+        self.dp = nn.Dropout(p=0.3)
 
     def forward(self, x):
         output = self.fc1(x)
-        output = self.bn(output)
+        #output = self.bn(output)
         output = self.relu(output)
         output = self.fc2(output)
         return output

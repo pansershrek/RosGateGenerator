@@ -5,7 +5,7 @@ BASE_MOTION_TEMPLATE = {
         "position": {
             "x": None,
             "y": None,
-            "z": 0.22365788448808482
+            "z": 0.215
         },
         "orientation": { #(z^2+w^2 = 1) !!!!!
             "x": 0.0,

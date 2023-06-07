@@ -53,7 +53,7 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
     for leg in ["leg1", "leg2", "leg3", "leg4"]:
         tmp_point[leg].pop("contact", False)
         leg_contacs.append(tmp_point[leg].pop("contact", False))
-
+    kek_step = 0
     for x in sorted(tmp_point.keys()):
         if x == "step":
             continue
@@ -61,6 +61,8 @@ def create_tensor_from_trajectory_point(point: dict) -> list:
             for z in sorted(tmp_point[x][y].keys()):
                 for k in sorted(tmp_point[x][y][z].keys()):
                     coord_tensor.append(float(tmp_point[x][y][z][k]))
+                    #print(x, y, z, k, kek_step)
+                    kek_step += 1
     return coord_tensor, leg_contacs
 
 def create_tensor_from_trajectory_point_for_predict(point: dict) -> list:
@@ -239,17 +241,20 @@ def get_point_from_trajectory_by_idx(trajectory, idx):
 
 def get_trajectory_phrame(trajectory, idx):
     ans = []
-    #for phrame_idx in range(idx + 1, idx + 20):
-    for phrame_idx in range(idx + 1, idx + 6):
+    for phrame_idx in range(idx + 1, idx + 20):
+    #for phrame_idx in range(idx + 1, idx + 6):
         tmp_point = get_point_from_trajectory_by_idx(
             trajectory, phrame_idx
         )
-        ans += tmp_point
-        #ans += (
-        #    tmp_point[: 7] +
-        #    tmp_point[7: 9] +
-        #    tmp_point[14: 16] +
-        #    tmp_point[21: 23] +
-        #    tmp_point[28: 30]
-        #) # Do we have to predict only x,y or x,y,z of a leg?
+        #print("original full", tmp_point)
+        #break
+        ans += tmp_point[28:]
+        #if phrame_idx == idx + 9 or phrame_idx == idx + 19:
+        #    ans += (
+        #        tmp_point[: 7] +
+        #        tmp_point[7: 9] +
+        #        tmp_point[14: 16] +
+        #        tmp_point[21: 23] +
+        #        tmp_point[28: 30]
+        #    ) # Do we have to predict only x,y or x,y,z of a leg?
     return ans

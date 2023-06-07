@@ -12,6 +12,7 @@ def inference_ff(
         model, start_point, shift, device,
         eps = {"x": 0.1, "y": 0.1, "angle": math.pi/6}
     ):
+    
     model.eval()
     start_point_tensor = create_tensor_from_trajectory_point_for_predict(
         start_point
@@ -29,8 +30,34 @@ def inference_ff(
     prev_point = prev_point.view(1, -1)
     predict_points = model(prev_point.to(device))
     predict_points = predict_points[0].tolist()
+    for x in range(0, 19):
+        ans.append(predict_points[x * 35: (x+1) * 35])
+    prev_point = torch.FloatTensor(
+        shift + ans[-1]# + start_point_tensor + cur_point
+    )
+    prev_point = prev_point.view(1, -1)
+    predict_points = model(prev_point.to(device))
+    predict_points = predict_points[0].tolist()
     #for x in range(0, 19):
-    for x in range(0, 5):
+    for x in range(0, 19):
+        ans.append(predict_points[x * 35: (x+1) * 35])
+    prev_point = torch.FloatTensor(
+        shift + ans[-1]# + start_point_tensor + cur_point
+    )
+    prev_point = prev_point.view(1, -1)
+    predict_points = model(prev_point.to(device))
+    predict_points = predict_points[0].tolist()
+    #for x in range(0, 19):
+    for x in range(0, 19):
+        ans.append(predict_points[x * 35: (x+1) * 35])
+    prev_point = torch.FloatTensor(
+        shift + ans[-1]# + start_point_tensor + cur_point
+    )
+    prev_point = prev_point.view(1, -1)
+    predict_points = model(prev_point.to(device))
+    predict_points = predict_points[0].tolist()
+    #for x in range(0, 19):
+    for x in range(0, 19):
         ans.append(predict_points[x * 35: (x+1) * 35])
 
     #prev_point = torch.FloatTensor(
@@ -41,8 +68,6 @@ def inference_ff(
     #predict_points = predict_points[0].tolist()
     #for x in range(0, 19):
     #    ans.append(predict_points[x * 35: (x+1) * 35])
-
-
 
 
     return ans

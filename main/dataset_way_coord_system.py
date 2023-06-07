@@ -66,7 +66,8 @@ class MyDatasetFull(Dataset):
                 return self.__getitem__(random_item)
 
             self.cacher.set(trajectory_idx, (trajectory, generation))
-
+        print(trajectory)
+        exit(0)
         data = {
             "trajectory_idx": trajectory_idx,
             "pose_idx": pose_idx,
